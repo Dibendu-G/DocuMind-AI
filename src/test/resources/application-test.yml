@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: ocr-system-test
+  
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+    
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    
+  h2:
+    console:
+      enabled: false
+      
+logging:
+  level:
+    com.inhouse.ocr: DEBUG
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+    
+ocr:
+  processing:
+    temp-directory: ${java.io.tmpdir}/ocr-test
+    max-concurrent-jobs: 2
+    timeout-minutes: 5
+    
+  models:
+    base-path: ./test-models
+    text-detection: test-text-detection-model.zip
+    text-recognition: test-text-recognition-model.zip
+    image-enhancement: test-image-enhancement-model.zip
+    
+  image:
+    max-width: 1024
+    max-height: 1024
+    quality-threshold: 0.5
+    
+  performance:
+    batch-size: 8
+    cache-enabled: false
+    cache-max-size: 100

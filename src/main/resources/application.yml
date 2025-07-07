@@ -1,0 +1,82 @@
+spring:
+  application:
+    name: documind-ai-platform
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/documind_ai?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:password}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 20000
+      idle-timeout: 300000
+    
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+      
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      
+  task:
+    execution:
+      pool:
+        core-size: 4
+        max-size: 20
+        queue-capacity: 500
+        keep-alive: 60s
+        
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+    
+logging:
+  level:
+    com.inhouse.ocr: DEBUG
+    com.documind: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+      
+ocr:
+  processing:
+    temp-directory: ${java.io.tmpdir}/ocr-temp
+    max-concurrent-jobs: 10
+    timeout-minutes: 30
+    
+  models:
+    base-path: ./models
+    text-detection: text-detection-model.zip
+    text-recognition: text-recognition-model.zip
+    image-enhancement: image-enhancement-model.zip
+    
+  image:
+    max-width: 2048
+    max-height: 2048
+    quality-threshold: 0.7
+    
+  performance:
+    batch-size: 32
+    cache-enabled: true
+    cache-max-size: 1000
